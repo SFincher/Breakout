@@ -32,44 +32,47 @@ public class Breakout extends Applet implements Settings, MouseMotionListener {
 
         Timer timer1 = new Timer(16, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 ballX += xVel;
                 ballY += yVel;
-                Rectangle ballRectangle = new Rectangle(ballX, ballY, BALL_DIAM, BALL_DIAM);
-                Rectangle paddleRectangle = new Rectangle(paddleX, PADDLE_Y, PADDLE_WIDTH, PADDLE_HEIGHT);
 
-
-                if(ballX + BALL_DIAM >= APPLICATION_WIDTH || ballX <= 0) {
-                    xVel = -xVel;
-                }
-
-                if(ballY <= 0 || ballY >= APPLICATION_HEIGHT) {
-                    yVel = -yVel;
-                }
-     
-                if(ballRectangle.intersects(paddleRectangle)) {
-                    yVel = -yVel;
-                }
-
-                for(int i = 0; i < brick.length; i++) {
-
-                    if(brick[i].isVisible() && ballRectangle.intersects(rectangle[i])) {
-                        brick[i].setVisible(false);
-                        brickTotal--;
-                        yVel = -yVel;
-                    }
-                }
-
-                if(brickTotal == 0) {
-                    System.exit(0);
-                }
-
+                checkCollisions();
+                
                 repaint();
             }
         });
 
         timer1.start();
 
+    }
+
+    public void checkCollisions() {
+        Rectangle ballRectangle = new Rectangle(ballX, ballY, BALL_DIAM, BALL_DIAM);
+        Rectangle paddleRectangle = new Rectangle(paddleX, PADDLE_Y, PADDLE_WIDTH, PADDLE_HEIGHT);
+
+        if(ballX + BALL_DIAM >= APPLICATION_WIDTH || ballX <= 0) {
+            xVel = -xVel;
+        }
+
+        if(ballY <= 0 || ballY >= APPLICATION_HEIGHT) {
+            yVel = -yVel;
+        }
+
+        if(ballRectangle.intersects(paddleRectangle)) {
+            yVel = -yVel;
+        }
+
+        for(int i = 0; i < brick.length; i++) {
+
+            if(brick[i].isVisible() && ballRectangle.intersects(rectangle[i])) {
+                brick[i].setVisible(false);
+                brickTotal--;
+                yVel = -yVel;
+            }
+        }
+
+        if(brickTotal == 0) {
+            System.exit(0);
+        }
     }
 
     public void paint(Graphics g) {
